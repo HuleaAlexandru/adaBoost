@@ -1,0 +1,8 @@
+To scale images(used for training set):
+scaleImages(sourcePath, destinationPath, scale)
+e.g. scaleImages('TrainImages', 'TrainImagesScaled', 1/2.5);
+
+To train an adaBoost linear classifier:
+strongClassifier = trainAdaBoost(sourcePath);
+e.g. strongClassifier = trainAdaBoost('TrainImagesScaled');
+
