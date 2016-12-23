@@ -1,4 +1,4 @@
-function strongClassifier = trainAdaBoost(sourcePath)
+function [strongClassifier, subWindowSize] = trainAdaBoost(sourcePath)
     % create an example image as struct(x,y) with x the image, y the
     % classification
     sourceList = dir(sourcePath);
@@ -50,12 +50,14 @@ function strongClassifier = trainAdaBoost(sourcePath)
 	%disp(['The number of features is ', num2str(length(allFeatures)), ': ', num2str(elapsedTime), ' seconds']);
     %pause;
     
-    T = 10;
-    strongClassifier(T) = struct('h', NaN, 'alfa', -1);
+    T = 20;
+    weakClassifiers(T) = struct('h', NaN, 'alfa', -1);
+    strongClassifierThreshold = 0;
+    strongClassifier = struct('weakClassifiers', weakClassifiers, 'strongThreshold', strongClassifierThreshold);
     for t = 1:T
         tic;
         t
-        weights = extractfield(examples, 'w');
+        weights = [examples.w];
         weights = weights / sum(weights);
 
         for i = 1:length(examples)
@@ -89,8 +91,12 @@ function strongClassifier = trainAdaBoost(sourcePath)
             examples(i).w = weights(i);
         end
 
-        strongClassifier(t) = struct('h', bestClassifier, 'alfa', alfa);
+        weakClassifiers(t) = struct('h', bestClassifier, 'alfa', alfa);
+        subWindowSize = pictureSize;
         
+        strongClassifierThreshold = strongClassifierThreshold + alfa / 2;
+        strongClassifier.weakClassifiers = weakClassifiers;
+        strongClassifier.strongThreshold = strongClassifierThreshold;
         [tp, fp, fn, tn] = getConfusionMatrix(examples, strongClassifier);
         [tp, fp, fn, tn]
         
@@ -99,5 +105,5 @@ function strongClassifier = trainAdaBoost(sourcePath)
         disp(['False positive rate: ', num2str(fp / (fp + tn))]);
         elapsedTime = toc;
         disp(['Choose one weak classifier: ', num2str(elapsedTime), ' seconds']);
-    end
+    end 
 end
