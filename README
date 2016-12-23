@@ -3,6 +3,12 @@ scaleImages(sourcePath, destinationPath, scale)
 e.g. scaleImages('TrainImages', 'TrainImagesScaled', 1/2.5);
 
 To train an adaBoost linear classifier:
-strongClassifier = trainAdaBoost(sourcePath);
-e.g. strongClassifier = trainAdaBoost('TrainImagesScaled');
+[strongClassifier, subWindowSize] = trainAdaBoost(sourcePath);
+e.g. [strongClassifier, subWindowSize] = trainAdaBoost('TrainImagesScaled');
 
+To test an adaBoost linear classifier:
+- for a file:
+positiveSubWindows = testAdaBoost('D:\Matlab_Projects\LG\adaBoost\dataset\TrainImages\pos-0.pgm', strongClassifier, subWindowSize);
+
+- for all files in a directory:
+positiveSubWindows = testAdaBoost('D:\Matlab_Projects\LG\adaBoost\dataset\TrainImages', strongClassifier, subWindowSize);
