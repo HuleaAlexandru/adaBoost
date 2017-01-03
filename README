@@ -3,6 +3,11 @@ scaleImages(sourcePath, destinationPath, scale)
 e.g. scaleImages('TrainImages', 'TrainImagesScaled', 1/2.5);
 
 To train an adaBoost linear classifier:
-strongClassifier = trainAdaBoost(sourcePath);
-e.g. strongClassifier = trainAdaBoost('TrainImagesScaled');
+[strongClassifier, subWindowSize] = trainAdaBoost(sourcePath, outputFile);
+e.g. [strongClassifier, subWindowSize] = trainAdaBoost('TrainImages', 'train.in');
 
+To load an adaBoost linear classifier with 100 weak classifiers:
+[strongClassifier, subWindowSize] = loadTrainingOutput('bestLinearClassifier.in');
+
+To test the classifier:
+positiveSubWindows = testAdaBoost('test-5.pgm', strongClassifier, subWindowSize);
