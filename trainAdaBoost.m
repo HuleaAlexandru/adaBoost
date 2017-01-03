@@ -1,4 +1,4 @@
-function [strongClassifier, subWindowSize] = trainAdaBoost(sourcePath)
+function [strongClassifier, subWindowSize] = trainAdaBoost(sourcePath, outputFile)
     % create an example image as struct(x,y) with x the image, y the
     % classification
     sourceList = dir(sourcePath);
@@ -6,7 +6,7 @@ function [strongClassifier, subWindowSize] = trainAdaBoost(sourcePath)
     index = 0;
     positiveExamples = 0;
 	pictureSize = [0, 0];
-	noRandomFeatures = 100; 
+	noRandomFeatures = 2000; 
 	
 	tic;
     for fileId = 1:length(sourceList)
@@ -50,7 +50,8 @@ function [strongClassifier, subWindowSize] = trainAdaBoost(sourcePath)
 	%disp(['The number of features is ', num2str(length(allFeatures)), ': ', num2str(elapsedTime), ' seconds']);
     %pause;
     
-    T = 20;
+    T = 100;
+    iterationsNeeded = T;
     weakClassifiers(T) = struct('h', NaN, 'alfa', -1);
     strongClassifierThreshold = 0;
     strongClassifier = struct('weakClassifiers', weakClassifiers, 'strongThreshold', strongClassifierThreshold);
@@ -105,5 +106,14 @@ function [strongClassifier, subWindowSize] = trainAdaBoost(sourcePath)
         disp(['False positive rate: ', num2str(fp / (fp + tn))]);
         elapsedTime = toc;
         disp(['Choose one weak classifier: ', num2str(elapsedTime), ' seconds']);
-    end 
+        
+        %if fp == 0 && fn == 0
+        %    iterationsNeeded = t;
+        %    break;
+        %end
+    end
+    
+    weakClassifiers = weakClassifiers(1:iterationsNeeded);
+    strongClassifier.weakClassifiers = weakClassifiers;
+    saveTrainingOutput(outputFile, strongClassifier, subWindowSize);
 end

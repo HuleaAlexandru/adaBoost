@@ -1,6 +1,6 @@
 function positiveSubWindows = getPositiveSubWindows(example, strongClassifier, subWindowSize)
     index = 0;
-    scale = 1.25;
+    scale = 2;
     shift = 1.5;
     subWindowHeight = subWindowSize(1);
 	subWindowWidth = subWindowSize(2);

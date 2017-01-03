@@ -10,7 +10,8 @@ function class = classifyExample(example, strongClassifier)
             break;
         end
         featureSum = getDescriptor(example.ii, weakClassifier.feature);
-        %disp(['sum = ', num2str(featureSum), ' threshold ', num2str(weakClassifier.threshold), ' origin: ', num2str(weakClassifier.feature.haarFeatures(1).origin)]);
+        %disp(['sum = ', num2str(featureSum), ' threshold ', num2str(weakClassifier.threshold), ' origin: ', num2str(weakClassifier.feature.haarFeatures(1).origin), ...
+        %    ' width = ', num2str(weakClassifier.feature.haarFeatures(1).width), ' height = ', num2str(weakClassifier.feature.haarFeatures(1).height)]);
         classification = featureSum * weakClassifier.parity < weakClassifier.threshold * weakClassifier.parity;
         exampleSum = exampleSum + classification * alfa;
     end
